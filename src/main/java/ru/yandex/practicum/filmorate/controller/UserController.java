@@ -1,7 +1,9 @@
 package ru.yandex.practicum.filmorate.controller;
 
 import java.time.LocalDate;
-import java.util.HashSet;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.validation.Valid;
 
@@ -22,23 +24,23 @@ import ru.yandex.practicum.filmorate.model.User;
 @RequestMapping("/users")
 public class UserController {
 
-    private final HashSet<User> users = new HashSet<>();
+    private final Map<Integer, User> users = new HashMap<>();
 
     @GetMapping()
-    public HashSet<User> findAll() {
+    public Collection<User> findAll() {
         log.debug("Users count is: {}", users.size());
-        return users;
+        return users.values();
     }
 
     @PostMapping()
     public User create(@Valid @RequestBody User user) {
-        if (users.contains(user)) {
+        if (users.containsKey(user.getId())) {
             throw new ObjectAlreadyExistException("User already exists.");
         } else {
             validateUser(user);
             User newUser = validateUserName(user);
             newUser.setId(users.size() + 1);
-            users.add(newUser);
+            users.put(newUser.getId(), newUser);
             log.debug("User is added: {}", newUser);
             return newUser;
         }
@@ -46,12 +48,12 @@ public class UserController {
 
     @PutMapping()
     public User saveUser(@Valid @RequestBody User user) {
+        if (!users.containsKey(user.getId())) {
+            throw new ValidationException("User not found.");
+        }
         validateUser(user);
         User newUser = validateUserName(user);
-        if (!users.contains(newUser)) {
-            newUser.setId(users.size() + 1);
-        }
-        users.add(newUser);
+        users.put(newUser.getId(), newUser);
         log.debug("User is updated: {}", newUser);
         return newUser;
     }
