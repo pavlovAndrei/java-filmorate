@@ -2,7 +2,6 @@ package ru.yandex.practicum.filmorate.controller;
 
 import java.time.LocalDate;
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
