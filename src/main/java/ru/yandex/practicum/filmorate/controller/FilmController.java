@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import static org.apache.commons.lang3.StringUtils.isNotBlank;
+import static org.apache.commons.lang3.StringUtils.isBlank;
 
 import lombok.extern.slf4j.Slf4j;
 import ru.yandex.practicum.filmorate.exception.ObjectAlreadyExistException;
@@ -59,7 +59,7 @@ public class FilmController {
     }
 
     private void validateFilm(Film film) {
-        if (isNotBlank(film.getName())) {
+        if (isBlank(film.getName())) {
             throw new ValidationException("Film must contain name.");
         } else if (film.getDescription().length() > 200) {
             throw new ValidationException("Film description must be not more than 200 characters.");
