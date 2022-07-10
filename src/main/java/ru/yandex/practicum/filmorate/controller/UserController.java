@@ -14,6 +14,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import static org.apache.commons.lang3.StringUtils.isNotBlank;
+
 import lombok.extern.slf4j.Slf4j;
 import ru.yandex.practicum.filmorate.exception.ObjectAlreadyExistException;
 import ru.yandex.practicum.filmorate.exception.ValidationException;
@@ -59,11 +61,11 @@ public class UserController {
     }
 
     private void validateUser(User user) {
-        if (user.getEmail() == null || user.getEmail().isBlank()) {
+        if (isNotBlank(user.getEmail())) {
             throw new ValidationException("User must contain email.");
         } else if (!user.getEmail().contains("@")) {
             throw new ValidationException("User must contain @ symbol.");
-        } else if (user.getLogin() == null || user.getLogin().isBlank()) {
+        } else if (isNotBlank(user.getLogin())) {
             throw new ValidationException("User must contain login.");
         } else if (user.getLogin().contains(" ")) {
             throw new ValidationException("User login must not contain whitespaces.");
@@ -73,7 +75,7 @@ public class UserController {
     }
 
     private User validateUserName(User user) {
-        if (user.getName() == null || user.getName().isBlank()) {
+        if (isNotBlank(user.getName())) {
             user.setName(user.getLogin());
         }
         return user;
